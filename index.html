@@ -70,7 +70,8 @@
             }
 
             try {
-                const response = await fetch('TU_URL_SCRIPT', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbzo8ollGaZRJhGY2QmbHS4oTCf0wdM0pfZMLfRM-5ZGrOkqaruHKq3mSkb7JbQkzRgbzg/exec', {
+
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
