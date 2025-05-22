@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario DDHH</title>
+    <style>
+        .tab { display: none; }
+        .active { display: block; }
+    </style>
+</head>
+<body>
+    <!-- Pestañas -->
+    <button onclick="openTab('escenarios')">Escenarios</button>
+    <button onclick="openTab('tematicas')">Temáticas</button>
+    <button onclick="openTab('poblaciones')">Poblaciones</button>
+
+    <!-- Formulario Escenarios -->
+    <div id="escenarios" class="tab active">
+        <h3>Escenarios DDHH</h3>
+        <input type="text" id="especialidad" placeholder="Especialidad">
+        <input type="text" id="escenario" placeholder="Escenario">
+        <input type="text" id="tipo_escenario" placeholder="Tipo de escenario">
+        <button onclick="submitData('escenarios')">Guardar</button>
+    </div>
+
+    <!-- Formulario Temáticas -->
+    <div id="tematicas" class="tab">
+        <h3>Temáticas SEN</h3>
+        <input type="text" id="clasificacion_tematica" placeholder="Clasificación temática">
+        <input type="text" id="tematicas_sensibilizados" placeholder="Temáticas sensibilizados">
+        <button onclick="submitData('tematicas')">Guardar</button>
+    </div>
+
+    <!-- Formulario Poblaciones -->
+    <div id="poblaciones" class="tab">
+        <h3>Poblaciones</h3>
+        <input type="text" id="grupo_poblacional" placeholder="Grupo poblacional">
+        <input type="text" id="tipo_poblacional" placeholder="Tipo poblacional">
+        <button onclick="submitData('poblaciones')">Guardar</button>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        async function submitData(section) {
+            const data = {};
+            data[section] = {};
+
+            if (section === 'escenarios') {
+                data.escenarios = {
+                    especialidad: document.getElementById('especialidad').value,
+                    escenario: document.getElementById('escenario').value,
+                    tipo_escenario: document.getElementById('tipo_escenario').value
+                };
+            } else if (section === 'tematicas') {
+                data.tematicas = {
+                    clasificacion_tematica: document.getElementById('clasificacion_tematica').value,
+                    tematicas_sensibilizados: document.getElementById('tematicas_sensibilizados').value
+                };
+            } else if (section === 'poblaciones') {
+                data.poblaciones = {
+                    grupo_poblacional: document.getElementById('grupo_poblacional').value,
+                    tipo_poblacional: document.getElementById('tipo_poblacional').value
+                };
+            }
+
+            try {
+                const response = await fetch('TU_URL_SCRIPT', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('¡Datos guardados!');
+                    // Limpiar campos opcional
+                    document.querySelectorAll(`#${section} input`).forEach(input => input.value = '');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
